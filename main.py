@@ -4,6 +4,7 @@ import base64
 import json
 import io
 import mimetypes
+import os
 import zlib
 import urllib.request
 from pathlib import Path
@@ -14,6 +15,10 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import HTMLResponse, Response
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from pydantic import BaseModel, Field
+
+# Keep Playwright browser binaries inside the deployment artifact.
+os.environ.setdefault("PLAYWRIGHT_BROWSERS_PATH", "0")
+
 from playwright.async_api import async_playwright
 
 
@@ -135,12 +140,18 @@ async def generate_report_pdf(request: Request, payload: ReportRequest) -> Respo
     report_link = str(request.url_for("view_report", token=token))
     html = render_report_html(payload, report_link)
 
-    async with async_playwright() as playwright:
-        browser = await playwright.chromium.launch()
-        page = await browser.new_page(viewport={"width": 900, "height": 1400}, device_scale_factor=2)
-        await page.set_content(html, wait_until="networkidle")
-        pdf_bytes = await page.pdf(format="A4", print_background=True, margin={"top": "0", "right": "0", "bottom": "0", "left": "0"})
-        await browser.close()
+    try:
+        async with async_playwright() as playwright:
+            browser = await playwright.chromium.launch()
+            page = await browser.new_page(viewport={"width": 900, "height": 1400}, device_scale_factor=2)
+            await page.set_content(html, wait_until="networkidle")
+            pdf_bytes = await page.pdf(format="A4", print_background=True, margin={"top": "0", "right": "0", "bottom": "0", "left": "0"})
+            await browser.close()
+    except Exception as exc:
+        raise HTTPException(
+            status_code=503,
+            detail="PDF engine is unavailable on this deployment. Ensure Chromium is installed in the build step.",
+        ) from exc
 
     filename = f"performance-report-{payload.report_id}.pdf"
     return Response(
