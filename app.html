@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Report - Aarav Sharma</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --accent-blue: #3f51b5;
+            --soft-blue: #bde4f4;
+            --star-gold: #ffc107;
+            --text-gray: #555;
+            --card-shadow: 0 10px 25px rgba(189, 228, 244, 0.4);
+        }
+
+        body {
+            background-color: #f0f2f5;
+            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .report-page {
+            background: white;
+            width: 700px;
+            padding: 50px 60px;
+            box-shadow: 0 0 40px rgba(0,0,0,0.1);
+            position: relative;
+            color: #333;
+        }
+
+        /* Header Section */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .logo-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .logo-img {
+            width: 50px;
+            height: auto;
+            margin-bottom: 5px;
+        }
+
+        .logo-text {
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        .logo-text span {
+            color: #e91e63;
+            font-weight: 600;
+        }
+
+        .meta-info {
+            text-align: right;
+            font-size: 13px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        /* Titles */
+        .titles {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .titles h1 {
+            font-size: 26px;
+            font-weight: 400;
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+
+        .titles h2 {
+            font-size: 32px;
+            font-weight: 500;
+            margin: 10px 0;
+        }
+
+        /* Profile Image */
+        .profile-placeholder {
+            width: 180px;
+            height: 180px;
+            background-color: var(--soft-blue);
+            margin: 0 auto;
+            border-radius: 35px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .profile-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .category {
+            text-align: center;
+            color: var(--accent-blue);
+            font-size: 22px;
+            margin: 25px 0 40px 0;
+            font-weight: 400;
+        }
+
+        /* Metrics Cards */
+        .metrics-grid {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            flex: 1;
+            padding: 15px 5px;
+            text-align: center;
+            border-radius: 4px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .card p {
+            margin: 0 0 10px 0;
+            font-size: 13px;
+            font-weight: 500;
+            color: #444;
+        }
+
+        .stars {
+            color: var(--star-gold);
+            font-size: 14px;
+            letter-spacing: 2px;
+        }
+
+        .overall-section {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 50px;
+        }
+
+        .overall-card {
+            width: 150px;
+        }
+
+        /* Footer Layout */
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .bullets {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #444;
+        }
+
+        .bullets li::before {
+            content: "• ";
+            font-weight: bold;
+        }
+
+        /* Score Circle */
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border: 6px solid #f8bbd0; /* Soft pink border */
+            box-shadow: 0 0 25px rgba(189, 228, 244, 0.8);
+            position: relative;
+        }
+
+        .score-circle::after {
+            content: '';
+            position: absolute;
+            top: -10px; left: -10px; right: -10px; bottom: -10px;
+            border-radius: 50%;
+            border: 1px solid rgba(189, 228, 244, 0.5);
+            z-index: -1;
+        }
+
+        .score-value {
+            font-size: 38px;
+            font-weight: 600;
+        }
+
+        .score-value span {
+            font-size: 20px;
+            color: #888;
+            font-weight: 400;
+        }
+
+        /* Bottom Technical Footer */
+        .technical-footer {
+            margin-top: 60px;
+            text-align: center;
+            font-size: 12px;
+            color: #888;
+        }
+
+        .technical-footer p { margin: 4px 0; }
+
+        .qr-footer {
+            margin-top: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .qr-footer img {
+            width: 88px;
+            height: 88px;
+            display: block;
+        }
+
+        .qr-footer a {
+            color: var(--accent-blue);
+            text-decoration: none;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+
+<div class="report-page">
+    <div class="header">
+        <div class="logo-area">
+            <div class="logo-text">book<span>my</span>stage</div>
+        </div>
+        <div class="meta-info">
+            Report ID: &nbsp;&nbsp;{{ report_id }}<br>
+            {{ report_date }}
+        </div>
+    </div>
+
+    <div class="titles">
+        <h1>Performance Evaluation Report</h1>
+        <h2>{{ name }}</h2>
+    </div>
+
+    <div class="profile-placeholder">
+        {% if profile_pic_data %}
+        <img src="{{ profile_pic_data }}" alt="{{ name }} profile picture">
+        {% endif %}
+    </div>
+
+    <div class="category">{{ event_name }}</div>
+
+    <div class="metrics-grid">
+        <div class="card">
+            <p>Confidence</p>
+            <div class="stars">{{ confidence_stars }}</div>
+        </div>
+        <div class="card">
+            <p>Creativity</p>
+            <div class="stars">{{ creativity_stars }}</div>
+        </div>
+        <div class="card">
+            <p>Technique</p>
+            <div class="stars">{{ technique_stars }}</div>
+        </div>
+        <div class="card">
+            <p>Expression</p>
+            <div class="stars">{{ expression_stars }}</div>
+        </div>
+    </div>
+
+    <div class="overall-section">
+        <div class="card overall-card">
+            <p>Overall Impact</p>
+            <div class="stars">{{ overall_impact_stars }}</div>
+        </div>
+    </div>
+
+    <div class="footer-content">
+        <ul class="bullets">
+            {% for bullet in bullets %}
+            <li>{{ bullet }}</li>
+            {% endfor %}
+        </ul>
+
+        <div class="score-circle">
+            <div class="score-value">{{ score_value }}<span>/5</span></div>
+        </div>
+    </div>
+
+    <div class="technical-footer">
+        <p>pdf2htmlEX -zoom 1.5 input.pdf</p>
+        <p>Note: This report is generated based on the evaluation done by Expert Jury</p>
+        <div class="qr-footer">
+            <img src="{{ qr_code_data }}" alt="QR code for {{ name }} report">
+            <a href="{{ report_link }}">{{ report_link }}</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
