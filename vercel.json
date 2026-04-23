@@ -1,9 +1,16 @@
 {
   "buildCommand": "PLAYWRIGHT_BROWSERS_PATH=0 python -m playwright install chromium",
   "functions": {
-    "main.py": {
+    "api/index.py": {
       "maxDuration": 60,
-      "memory": 1024
+      "memory": 1024,
+      "includeFiles": "app.html"
     }
-  }
+  },
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/api/index"
+    }
+  ]
 }
