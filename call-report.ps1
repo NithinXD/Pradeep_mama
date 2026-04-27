@@ -10,11 +10,11 @@ $payload = @{
     profile_pic = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO2Z8fQAAAAASUVORK5CYII="
     event_name = "Dance Performance"
     confidence = 5
-    creativity = 5
-    technique = 5
+    creativity = 3
+    technique = 2
     expression = 5
     overall_impact = 5
-    score_value = 4.8
+    score_value = 2.4
     bullets = @(
         "Strong stage presence and confident delivery"
         "Clean technique with good musicality"
