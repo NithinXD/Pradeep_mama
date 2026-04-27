@@ -1,0 +1,31 @@
+{
+"items": [
+{
+"title": "Rhythm & Timing",
+"rating": 4,
+"comment": "Good sync with music"
+},
+{
+"title": "Movement & Technique",
+"rating": 4,
+"comment": "Good control"
+},
+{
+"title": "Expression & Energy",
+"rating": 3,
+"comment": "Needs more facial expression"
+},
+{
+"title": "Creativity",
+"rating": 4,
+"comment": "Nice choreography"
+},
+{
+"title": "Overall Impact",
+"rating": 4,
+"comment": "Good performance"
+}
+]
+}
+
+body raw

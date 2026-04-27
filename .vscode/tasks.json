@@ -1,0 +1,384 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "check-mongo",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"-m",
+				"pip",
+				"install",
+				"pymongo[srv]",
+				";",
+				"python",
+				"-c",
+				"import os; from urllib.parse import quote_plus; from pymongo import MongoClient; uri = \"mongodb+srv://{}:{}@{}/{}?retryWrites=true&w=majority&appName=Cluster0\".format(quote_plus(os.environ['DB_USER']), quote_plus(os.environ['DB_PASSWORD']), os.environ['DB_CLUSTER'], os.environ['DB_NAME']); print(uri); client = MongoClient(uri, serverSelectionTimeoutMS=30000); print(client.admin.command('ping'))"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "check-mongo-ping",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"$env:DB_USER='bookmystage'; $env:DB_PASSWORD='keshavbook'; $env:DB_CLUSTER='cluster0.fydj3.mongodb.net'; $env:DB_NAME='bookmystage'; $script = @'\nimport os\nfrom urllib.parse import quote_plus\nfrom pymongo import MongoClient\n\nuri = \"mongodb+srv://{}:{}@{}/{}?retryWrites=true&w=majority&appName=Cluster0\".format(\n    quote_plus(os.environ[\"DB_USER\"]),\n    quote_plus(os.environ[\"DB_PASSWORD\"]),\n    os.environ[\"DB_CLUSTER\"],\n    os.environ[\"DB_NAME\"],\n)\nprint(uri)\nclient = MongoClient(uri, serverSelectionTimeoutMS=30000)\nprint(client.admin.command(\"ping\"))\n'@; Set-Content -Path .\\_mongo_check.py -Value $script; python .\\_mongo_check.py; Remove-Item .\\_mongo_check.py"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "mongo-ping-direct",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"-c",
+				"import os; os.environ.update({'DB_USER':'bookmystage','DB_PASSWORD':'keshavbook','DB_CLUSTER':'cluster0.fydj3.mongodb.net','DB_NAME':'bookmystage'}); from urllib.parse import quote_plus; from pymongo import MongoClient; uri = 'mongodb+srv://{}:{}@{}/{}?retryWrites=true&w=majority&appName=Cluster0'.format(quote_plus(os.environ['DB_USER']), quote_plus(os.environ['DB_PASSWORD']), os.environ['DB_CLUSTER'], os.environ['DB_NAME']); print(uri); client = MongoClient(uri, serverSelectionTimeoutMS=30000); print(client.admin.command('ping'))"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "mongo-ping-direct",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"-c",
+				"import os; os.environ.update({'DB_USER':'bookmystage','DB_PASSWORD':'keshavbook','DB_CLUSTER':'cluster0.fydj3.mongodb.net','DB_NAME':'bookmystage'}); from urllib.parse import quote_plus; from pymongo import MongoClient; uri = 'mongodb+srv://' + quote_plus(os.environ['DB_USER']) + ':' + quote_plus(os.environ['DB_PASSWORD']) + '@' + os.environ['DB_CLUSTER'] + '/' + os.environ['DB_NAME'] + '?retryWrites=true' + chr(38) + 'w=majority' + chr(38) + 'appName=Cluster0'; print(uri); client = MongoClient(uri, serverSelectionTimeoutMS=30000); print(client.admin.command('ping'))"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "mongo-ping-file",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"_mongo_check.py"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "compile-main",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"-m",
+				"py_compile",
+				"main.py"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "compile-main",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"-m",
+				"py_compile",
+				"main.py"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "gemini-insights-check",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"$env:GEMINI_API_KEY='AIzaSyD3ETuXPj5WelpUxUCvJ_2cDhLE24m9pJM'; python .\\_insights_check.py"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "gemini-insights-check",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"$env:GEMINI_API_KEY=\"AIzaSyD3ETuXPj5WelpUxUCvJ_2cDhLE24m9pJM\"; python .\\_insights_check.py"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "gemini-insights-check-cmd",
+			"type": "shell",
+			"command": "cmd",
+			"args": [
+				"/c",
+				"set GEMINI_API_KEY=AIzaSyD3ETuXPj5WelpUxUCvJ_2cDhLE24m9pJM&& python _insights_check.py"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "compile-main-2",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"-m",
+				"py_compile",
+				"main.py"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "gemini-insights-check-cmd-2",
+			"type": "shell",
+			"command": "cmd",
+			"args": [
+				"/c",
+				"set GEMINI_API_KEY=AIzaSyD3ETuXPj5WelpUxUCvJ_2cDhLE24m9pJM&& python _insights_check.py"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "compile-main-3",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"-m",
+				"py_compile",
+				"main.py"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "gemini-retry-check",
+			"type": "shell",
+			"command": "cmd",
+			"args": [
+				"/c",
+				"set GEMINI_API_KEY=AIzaSyD3ETuXPj5WelpUxUCvJ_2cDhLE24m9pJM&& python _insights_check.py"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "gemini-retry-check-newkey",
+			"type": "shell",
+			"command": "cmd",
+			"args": [
+				"/c",
+				"set GEMINI_API_KEY=AIzaSyAJ25xYIe_CnPdGwR_Q3USXpzVNbxpOwAw&& python _insights_check.py"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "gemini-retry-check-key3",
+			"type": "shell",
+			"command": "cmd",
+			"args": [
+				"/c",
+				"set GEMINI_API_KEY=AIzaSyBT0crXAfL1Ymz9SYuCtQgVvwg-MIJqqOI&& python _insights_check.py"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "compile-main-groq",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"-m",
+				"py_compile",
+				"main.py"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "groq-live-check",
+			"type": "shell",
+			"command": "cmd",
+			"args": [
+				"/c",
+				"set GROQ_API_KEY=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&& set GEMINI_API_KEY=&& python _insights_check.py"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "groq-error-detail",
+			"type": "shell",
+			"command": "cmd",
+			"args": [
+				"/c",
+				"python -c \"import json, urllib.request, urllib.error; req=urllib.request.Request('https://api.groq.com/openai/v1/chat/completions', data=json.dumps({'model':'llama-3.1-8b-instant','messages':[{'role':'user','content':'hello'}]}).encode('utf-8'), headers={'Content-Type':'application/json','Authorization':'Bearer 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'}, method='POST');\ntry:\n resp=urllib.request.urlopen(req,timeout=30); print(resp.status); print(resp.read().decode('utf-8'))\nexcept urllib.error.HTTPError as e:\n print(e.code); print(e.read().decode('utf-8'))\""
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "groq-error-detail-2",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"_groq_error_check.py"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "groq-probe",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"_groq_probe.py"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "cerebras-probe",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"_cerebras_probe.py"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "cerebras-probe-retry",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"_cerebras_probe.py"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "cerebras-probe-retry-2",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"_cerebras_probe.py"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "llm-probe-now",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"_llm_probe.py"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "llm-probe-now-2",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"_llm_probe.py"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "fireworks-probe",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"_fireworks_probe.py"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "fireworks-probe-2",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"_fireworks_probe.py"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "fireworks-request",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"_fireworks_request.py"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "compile-main-fireworks",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"-m",
+				"py_compile",
+				"main.py"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "fireworks-live-request",
+			"type": "shell",
+			"command": "cmd",
+			"args": [
+				"/c",
+				"set FIREWORKS_API_KEY=fw_4zBbR4pgrq2fbrJd532Sav&& set FIREWORKS_MODEL=accounts/fireworks/models/kimi-k2p6&& python _fireworks_request.py"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		}
+	]
+}
