@@ -227,7 +227,7 @@
 			"command": "cmd",
 			"args": [
 				"/c",
-				"set GROQ_API_KEY=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&& set GEMINI_API_KEY=&& python _insights_check.py"
+				"set GROQ_API_KEY=aa&& set GEMINI_API_KEY=&& python _insights_check.py"
 			],
 			"isBackground": false,
 			"problemMatcher": [],
