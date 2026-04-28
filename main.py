@@ -32,6 +32,7 @@ TEMPLATE_ENV = Environment(
     autoescape=select_autoescape(["html", "xml"]),
 )
 REPORT_TEMPLATE = TEMPLATE_ENV.get_template("app.html")
+CERTIFICATE_TEMPLATE = TEMPLATE_ENV.get_template("certificate.html")
 INSIGHT_PROMPT_PATH = BASE_DIR / "Prompt_AI Insights_PER.md"
 
 
@@ -71,6 +72,19 @@ class ReportRequest(BaseModel):
     overall_impact: int = Field(..., ge=0, le=5)
     score_value: float = Field(..., ge=0, le=5)
     bullets: list[str] = Field(..., min_length=3, max_length=3)
+
+
+class CertificateRequest(BaseModel):
+    certificate_id: str = Field(..., min_length=1)
+    issued_date: str = Field(..., min_length=1)
+    performer_name: str = Field(..., min_length=1)
+    performance_title: str = Field(..., min_length=1)
+    achievement_text: str = Field(..., min_length=1)
+    honors_text: str = Field(default="Presented with Highest Honors", min_length=1)
+    day_text: str = Field(default="On this Day", min_length=1)
+    award_date_text: str = Field(..., min_length=1)
+    organization_text: str = Field(..., min_length=1)
+    background_image: str = Field(default="IMG_9174.PNG", min_length=1)
 
 
 class InsightItem(BaseModel):
@@ -156,6 +170,23 @@ def render_report_html(payload: ReportRequest, report_link: str) -> str:
     )
 
 
+def render_certificate_html(payload: CertificateRequest, certificate_link: str) -> str:
+    return CERTIFICATE_TEMPLATE.render(
+        certificate_id=payload.certificate_id,
+        issued_date=payload.issued_date,
+        performer_name=payload.performer_name,
+        performance_title=payload.performance_title,
+        achievement_text=payload.achievement_text,
+        honors_text=payload.honors_text,
+        day_text=payload.day_text,
+        award_date_text=payload.award_date_text,
+        organization_text=payload.organization_text,
+        background_image_data=resolve_profile_pic(payload.background_image),
+        qr_code_data=build_qr_code_data(certificate_link),
+        certificate_link=certificate_link,
+    )
+
+
 def payload_to_dict(payload: ReportRequest) -> dict[str, Any]:
     if hasattr(payload, "model_dump"):
         return payload.model_dump()
@@ -166,6 +197,18 @@ def payload_from_dict(data: dict[str, Any]) -> ReportRequest:
     if hasattr(ReportRequest, "model_validate"):
         return ReportRequest.model_validate(data)
     return ReportRequest.parse_obj(data)
+
+
+def certificate_payload_to_dict(payload: CertificateRequest) -> dict[str, Any]:
+    if hasattr(payload, "model_dump"):
+        return payload.model_dump()
+    return payload.dict()
+
+
+def certificate_payload_from_dict(data: dict[str, Any]) -> CertificateRequest:
+    if hasattr(CertificateRequest, "model_validate"):
+        return CertificateRequest.model_validate(data)
+    return CertificateRequest.parse_obj(data)
 
 
 def encode_report_token(payload: ReportRequest) -> str:
@@ -180,6 +223,20 @@ def decode_report_token(token: str) -> ReportRequest:
     compressed = base64.urlsafe_b64decode(token + padding)
     payload_json = zlib.decompress(compressed).decode("utf-8")
     return payload_from_dict(json.loads(payload_json))
+
+
+def encode_certificate_token(payload: CertificateRequest) -> str:
+    payload_json = json.dumps(certificate_payload_to_dict(payload), separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+    compressed = zlib.compress(payload_json, level=9)
+    token = base64.urlsafe_b64encode(compressed).decode("ascii")
+    return token.rstrip("=")
+
+
+def decode_certificate_token(token: str) -> CertificateRequest:
+    padding = "=" * (-len(token) % 4)
+    compressed = base64.urlsafe_b64decode(token + padding)
+    payload_json = zlib.decompress(compressed).decode("utf-8")
+    return certificate_payload_from_dict(json.loads(payload_json))
 
 
 def _extract_three_bullets(text: str) -> list[str]:
@@ -316,6 +373,49 @@ async def view_report(request: Request, token: str) -> HTMLResponse:
 
     report_link = str(request.url_for("view_report", token=token))
     html = render_report_html(payload, report_link)
+    return HTMLResponse(content=html)
+
+
+@app.post("/certificates/pdf", response_class=Response)
+async def generate_certificate_pdf(request: Request, payload: CertificateRequest) -> Response:
+    token = encode_certificate_token(payload)
+    certificate_link = str(request.url_for("view_certificate", token=token))
+    html = render_certificate_html(payload, certificate_link)
+
+    try:
+        async with async_playwright() as playwright:
+            browser = await playwright.chromium.launch()
+            page = await browser.new_page(viewport={"width": 1240, "height": 1754}, device_scale_factor=2)
+            await page.set_content(html, wait_until="networkidle")
+            pdf_bytes = await page.pdf(
+                format="A4",
+                print_background=True,
+                margin={"top": "0", "right": "0", "bottom": "0", "left": "0"},
+            )
+            await browser.close()
+    except Exception as exc:
+        raise HTTPException(
+            status_code=503,
+            detail="PDF engine is unavailable on this deployment. Ensure Chromium is installed in the build step.",
+        ) from exc
+
+    filename = f"certificate-{payload.certificate_id}.pdf"
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f'inline; filename="{filename}"'},
+    )
+
+
+@app.get("/certificates/{token}", response_class=HTMLResponse, name="view_certificate")
+async def view_certificate(request: Request, token: str) -> HTMLResponse:
+    try:
+        payload = decode_certificate_token(token)
+    except Exception:
+        raise HTTPException(status_code=404, detail="Certificate not found")
+
+    certificate_link = str(request.url_for("view_certificate", token=token))
+    html = render_certificate_html(payload, certificate_link)
     return HTMLResponse(content=html)
 
 

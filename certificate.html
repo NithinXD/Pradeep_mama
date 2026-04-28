@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate - {{ performer_name }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #2a1b11;
+            --gold: #6b4b1d;
+            --line: rgba(96, 67, 29, 0);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #ece3d3;
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--ink);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        @page {
+            size: A4 portrait;
+            margin: 0;
+        }
+
+        .sheet {
+            width: 210mm;
+            height: 297mm;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+            background: #f3e7d1;
+        }
+
+        .sheet::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url('{{ background_image_data }}');
+            background-size: 100% 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            filter: saturate(0.94) contrast(0.95);
+            z-index: 0;
+        }
+
+        .frame {
+            position: absolute;
+            inset: 12mm;
+            border: 1px solid var(--line);
+            z-index: 2;
+            opacity: 0.3;
+        }
+
+        .content {
+            position: relative;
+            z-index: 3;
+            width: 100%;
+            height: 100%;
+            transform: translateY(18mm);
+        }
+
+        .id-row {
+            position: absolute;
+            top: -20mm;
+            left: 20%;
+            right: 15%;
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: rgba(63, 40, 15, 0.82);
+            opacity: 1;
+            transform: translate(4mm, 4mm);
+        }
+
+        .title {
+            position: absolute;
+            top: 11.5%;
+            width: 100%;
+            text-align: center;
+            font-family: 'Great Vibes', cursive;
+            font-size: 58px;
+            line-height: 1;
+            color: #2e2016;
+            transform: translate(8mm, -12mm);
+        }
+
+        .subtitle {
+            position: absolute;
+            top: 20%;
+            width: 100%;
+            text-align: center;
+            font-size: 34px;
+            font-family: 'Great Vibes', cursive;
+            color: #302217;
+        }
+
+        .ornament {
+            display: none;
+        }
+
+        .recipient {
+            position: absolute;
+            top: 28%;
+            width: 100%;
+            text-align: center;
+            font-family: 'Great Vibes', cursive;
+            font-size: 88px;
+            line-height: 0.9;
+            color: #2b180e;
+        }
+
+        .achievement {
+            position: absolute;
+            top: 41%;
+            left: 28%;
+            right: 10%;
+            text-align: center;
+            font-size: 23px;
+            line-height: 1.25;
+            color: #3f2816;
+            transform: translateX(-10mm);
+        }
+
+        .honors {
+            position: absolute;
+            top: 56.5%;
+            width: 100%;
+            text-align: center;
+            font-size: 28px;
+            color: var(--gold);
+            font-weight: 600;
+            transform: translate(4mm, -16mm);
+        }
+
+        .meta {
+            position: absolute;
+            top: 61%;
+            width: 100%;
+            text-align: center;
+            font-size: 33px;
+            color: #412a15;
+        }
+
+        .date-line {
+            position: absolute;
+            top: 67%;
+            width: 100%;
+            text-align: center;
+            font-size: 31px;
+            color: #3b2614;
+            transform: translateX(2mm);
+        }
+
+        .org-line {
+            position: absolute;
+            top: 73%;
+            width: 100%;
+            text-align: center;
+            font-size: 25px;
+            color: #3b2614;
+            transform: translateX(2mm);
+        }
+
+        .qr-wrap {
+            position: absolute;
+            right: 24mm;
+            bottom: 30mm;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            max-width: 72px;
+            font-size: 9px;
+            color: #4f3a24;
+        }
+
+        .qr-wrap img {
+            width: 56px;
+            height: 56px;
+            display: block;
+            background: #fff;
+            padding: 2px;
+            border: 1px solid rgba(85, 56, 21, 0.36);
+        }
+
+        .qr-wrap a {
+            color: #4f3a24;
+            text-decoration: none;
+            word-break: break-word;
+            text-align: center;
+            line-height: 1.1;
+            font-size: 8px;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+<div class="sheet">
+    <div class="frame"></div>
+    <div class="content">
+        <div class="id-row">
+            <div>Certificate ID: {{ certificate_id }}</div>
+            <div>Issued: {{ issued_date }}</div>
+        </div>
+
+        <div class="title">Certificate of Achievement</div>
+        <div class="subtitle">This Certifies That</div>
+        <div class="ornament"></div>
+
+        <div class="recipient">{{ performer_name }}</div>
+        <div class="achievement">In recognition of {{ achievement_text }} for <strong>{{ performance_title }}</strong>.</div>
+
+        <div class="honors">{{ honors_text }}</div>
+        <div class="meta">{{ day_text }}</div>
+        <div class="date-line">{{ award_date_text }}</div>
+        <div class="org-line">{{ organization_text }}</div>
+
+        <div class="qr-wrap">
+            <img src="{{ qr_code_data }}" alt="QR code for certificate verification">
+            <a href="{{ certificate_link }}">Scan to verify</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
